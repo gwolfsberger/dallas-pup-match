@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dallas Pup Match | Find Your Forever Friend</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600;700&family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <a class="logo" href="index.html">Dallas Pup <span>Match</span></a>
+    <ul>
+      <li><a href="#how">Why Us</a></li>
+      <li><a href="#quiz">Pup Quiz</a></li>
+      <li><a href="adopt.html">Adopt</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="hero">
+  <video autoplay muted loop playsinline preload="auto">
+    <source src="video.mp4" type="video/mp4">
+  </video>
+  <div class="wrap content">
+    <span class="eyebrow">Dallas, TX · Rescue Adoption</span>
+    <h1>Every dog deserves a person. Let's find yours.</h1>
+    <p>Dallas Pup Match pairs local rescue dogs with families based on lifestyle, home and personality, so every adoption is one that lasts.</p>
+    <a class="btn btn-primary" href="adopt.html">Meet Our Dogs &amp; Adopt →</a>
+    <a class="btn btn-ghost" href="#quiz">Take the Pup Quiz</a>
+  </div>
+</header>
+
+<div class="stats">
+  <div class="wrap">
+    <div><strong>1,200+</strong>dogs matched with families</div>
+    <div><strong>96%</strong>of adoptions still together after a year</div>
+    <div><strong>48 hrs</strong>average time from application to meet &amp; greet</div>
+  </div>
+</div>
+
+<section id="how">
+  <div class="wrap">
+    <h2 class="section-title">Matching, not just adopting</h2>
+    <p class="lead">Shelters are full of great dogs, and adoptions often fail because the fit was wrong. We start with you, then find the dog.</p>
+    <div class="cards">
+      <div class="card">
+        <div class="icon">🏡</div>
+        <h3>Lifestyle-first matching</h3>
+        <p>We look at your schedule, space, kids and other pets before we suggest a single dog.</p>
+      </div>
+      <div class="card">
+        <div class="icon">🩺</div>
+        <h3>Vetted &amp; ready</h3>
+        <p>Every pup is spayed or neutered, vaccinated and microchipped before going home.</p>
+      </div>
+      <div class="card">
+        <div class="icon">🤝</div>
+        <h3>Support after adoption</h3>
+        <p>Free trainer check-ins for the first 30 days, because the first month is the hardest.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="quiz" class="quiz-section">
+  <div class="wrap">
+    <h2 class="section-title" style="text-align:center">Which pup is your perfect match?</h2>
+    <p class="lead" style="margin:0 auto 40px;text-align:center">Four quick questions. One very good dog.</p>
+    <div class="quiz" id="quizBox">
+      <div class="progress"><div id="bar"></div></div>
+      <div id="quizBody"></div>
+    </div>
+  </div>
+</section>
+
+<div class="xfactor">
+  <div class="wrap">
+    <p><strong>Our X-Factor: The Pup Match Quiz.</strong> Answer four lifestyle questions and the quiz matches you with an adoptable dog whose energy and needs fit your life, then links straight to the adoption page. It makes browsing fun and helps adoptions last.</p>
+  </div>
+</div>
+
+<footer>
+  <div class="wrap">© 2026 Dallas Pup Match · Have a question? Chat with our assistant in the corner.</div>
+</footer>
+
+<script>
+const questions = [
+  {q:"What does a perfect Saturday look like?", a:[["A long run or hike at White Rock Lake","high"],["A stroll to brunch on the patio","mid"],["Movies on the couch, no plans","low"]]},
+  {q:"Where do you live?", a:[["House with a big yard","high"],["Townhome or small yard","mid"],["Apartment in the city","low"]]},
+  {q:"How much time are you home?", a:[["Mostly home / remote work","high"],["Gone part of the day","mid"],["Long office days","low"]]},
+  {q:"Who else is at home?", a:[["Kids who love to play","mid"],["Another dog","high"],["Just me (or a cat)","low"]]}
+];
+const matches = {
+  high:{emoji:"🐕",name:"Biscuit",desc:"A 2-year-old Lab mix who lives for fetch and trail runs. You'll keep up with each other."},
+  mid:{emoji:"🐶",name:"Pepper",desc:"A 4-year-old beagle mix: up for a walk, just as happy to nap. The friendly all-rounder."},
+  low:{emoji:"🐩",name:"Lola",desc:"A 7-year-old poodle mix who's mastered the art of the couch. Low-key, loyal and apartment-perfect."}
+};
+let step = 0, score = {high:0, mid:0, low:0};
+const body = document.getElementById("quizBody"), bar = document.getElementById("bar");
+function render(){
+  bar.style.width = (step / questions.length * 100) + "%";
+  if(step < questions.length){
+    const q = questions[step];
+    body.innerHTML = `<h3>${q.q}</h3><div class="options">` +
+      q.a.map(([t,v]) => `<button data-v="${v}">${t}</button>`).join("") + `</div>`;
+    body.querySelectorAll("button").forEach(b => b.onclick = () => { score[b.dataset.v]++; step++; render(); });
+  } else {
+    const best = Object.keys(score).sort((a,b) => score[b] - score[a])[0];
+    const m = matches[best];
+    body.innerHTML = `<div class="result"><div class="emoji">${m.emoji}</div><p>Your match is</p><h3>${m.name}</h3><p>${m.desc}</p>
+      <a class="btn btn-primary" href="adopt.html">Start ${m.name}'s adoption →</a>
+      <button class="btn btn-ghost" id="again" style="margin-left:8px">Retake</button></div>`;
+    document.getElementById("again").onclick = () => { step = 0; score = {high:0, mid:0, low:0}; render(); };
+  }
+}
+render();
+</script>
+
+<script> window.chtlConfig = { chatbotId: "3285422961" } </script>
+<script async data-id="3285422961" id="chtl-script" type="text/javascript" src="https://chatling.ai/js/embed.js"></script>
+</body>
+</html>
